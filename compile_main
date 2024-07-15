@@ -1,0 +1,2 @@
+x86_64-w64-mingw32-gcc -o main.exe main.c -lws2_32 -static -s -O2 
+x86_64-w64-mingw32-strip --strip-all --strip-debug --strip-unneeded --discard-all --discard-locals main.exe
