@@ -2,8 +2,9 @@
 #include <tlhelp32.h>
 #include <stdio.h>
 #include <tchar.h>
+/* Grab SYSTEM token privileges via PROC_THREAD_ATTRIBUTE_PARENT_PROCESS */
 
-// Function to enable or disable privileges for a given token
+// Enable or disable privileges for a given token
 BOOL SetPrivilege(HANDLE hToken, LPCTSTR Privilege, BOOL bEnablePrivilege) {
     TOKEN_PRIVILEGES tp;
     LUID luid;
@@ -152,7 +153,7 @@ int main(int argc, char **argv) {
         return 2;
     }
 
-    // Prepare attribute list for creating the new process
+    // Create our PROC_THREAD_ATTRIBUTE_PARENT_PROCESS attribute
     ZeroMemory(&si, sizeof(STARTUPINFOEXA));
     InitializeProcThreadAttributeList(NULL, 1, 0, &size);
     si.lpAttributeList = (LPPROC_THREAD_ATTRIBUTE_LIST)HeapAlloc(
