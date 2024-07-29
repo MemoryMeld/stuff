@@ -1,0 +1,1 @@
+x86_64-w64-mingw32-gcc -c -o keylogger.o keylogger.c -luser32 -lkernel32
